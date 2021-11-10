@@ -67,5 +67,5 @@ def cleanup(file_name: str):
     
 def start():
     """Launch server for turtlifier"""
-    uvicorn.run("turtlifier.server:app", host="0.0.0.0", port=8000, reload=True)
     webbrowser.open_new("http://localhost:8000")
+    uvicorn.run("turtlifier.server:app", host="0.0.0.0", port=8000, reload=True)
