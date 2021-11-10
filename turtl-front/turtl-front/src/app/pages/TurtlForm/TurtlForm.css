@@ -1,0 +1,13 @@
+.dividr {
+    margin: 0 auto;
+    border-top: 1px solid #c3c9d4;
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.dividr * {
+    margin: 0 auto;
+    text-align: center;
+}
