@@ -15,6 +15,7 @@ export default function SeparatorSelector({ onChange, separator }) {
                     value={separator}
                     label="Separator"
                     onChange={onChange}
+                    
                 >
                     <MenuItem value={","}>Comma ',' </MenuItem>
                     <MenuItem value={";"}>Semicolon ';' </MenuItem>
