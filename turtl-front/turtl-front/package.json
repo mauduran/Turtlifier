@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "BUILD_PATH='../../turtlifier/static' react-scripts build && rm -rf ./../turtlifier/front && mkdir ../../turtlifier/front && mv ../../turtlifier/static/index.html ../../turtlifier/front/index.html && mv ../../turtlifier/static/static/* ../../turtlifier/static/ && rm -rf ../../turtlifier/static/static/ ",
+    "build": "BUILD_PATH='../../turtlifier/static' react-scripts build && rm -rf ../../turtlifier/front && mkdir ../../turtlifier/front && mv ../../turtlifier/static/index.html ../../turtlifier/front/index.html && mv ../../turtlifier/static/static/* ../../turtlifier/static/ && rm -rf ../../turtlifier/static/static/ ",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
