@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from turtlifier.config import Config
+from turtlifier.converter import Converter
 
 app = FastAPI()
 
@@ -56,12 +57,13 @@ async def turtlify(
         file_text.append(str(line, 'utf-8'))
 
     # Generate Turtl
+    turtlified_text = Converter.turtlify(file_text)
 
     # Write turtl into temp file
     output_file_name = file_name_no_ext + ".ttl"
 
     f = open(output_file_name, "w")
-    f.write('\n'.join(file_text))
+    f.write(turtlified_text)
     f.close()
 
     return FileResponse(

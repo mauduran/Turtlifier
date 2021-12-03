@@ -33,7 +33,6 @@ export default function TurtlForm() {
     const [hasTitles, setHasTitles] = useState(true);
     const [titleLineNum, setTitleLineNum] = useState("");
     const [dataLineNum, setDataLineNum] = useState("");
-    const [firstLineToProcess, setFirstLineToProcess] = useState("");
     const [lastLineToProcess, setLastLineToProcess] = useState("");
     const [subjectPrefix, setSubjectPrefix] = useState("s")
     const [subjectPrefixUri, setSubjectPrefixUri] = useState("https://ex.org/data/");
@@ -63,10 +62,7 @@ export default function TurtlForm() {
             formData.append('titleLineNum', titleLineNum);
         if (dataLineNum && dataLineNum !== "")
             formData.append('dataLineNum', dataLineNum);
-
-        if (firstLineToProcess && firstLineToProcess !== "")
-            formData.append('firstLineToProcess', firstLineToProcess);
-
+            
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('lastLineToProcess', lastLineToProcess);
 
@@ -206,24 +202,6 @@ export default function TurtlForm() {
                             width: "100%",
                             marginTop: "10px"
                         }} >
-                        <TextField
-                            id="first-line-to-read"
-                            label="First line to process"
-                            type="number"
-                            sx={{ width: "48%" }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                inputProps: {
-                                    min: 1
-                                }
-                            }}
-                            variant="standard"
-                            value={firstLineToProcess}
-                            onChange={(e) => setFirstLineToProcess(e.target.value)}
-                        />
-
                         <TextField
                             id="last-line-to-read"
                             label="Last line to process"
