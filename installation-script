@@ -2,19 +2,43 @@
 
 #Install React Front-end dependencies
 echo "A. Installing Front-end dependencies"
-cd ./turtl-front/turtl-front/ && npm i -f && cd ../../
+cd ./turtl-front/turtl-front/ && npm i -f
 echo "A. Front-end dependencies installed"
 
 #Build the React Front-end
 echo "B. Building react project"
-cd ./turtl-front/turtl-front/ && npm run build && cd ../../
+npm run build && cd ../../
 echo "B. Finished building react project"
 
+echo "C. Moving front-end build to backend."
+rm -rf ./turtlifier/turtlifier/front
+rm -rf ./turtlifier/turtlifier/static 
+mkdir ./turtlifier/turtlifier/front 
+mkdir ./turtlifier/turtlifier/static 
+mv ./turtlifier/front-build/index.html ./turtlifier/turtlifier/front/index.html 
+mv ./turtlifier/front-build/static/* ./turtlifier/turtlifier/static/ 
+rm -rf ./turtlifier/front-build/
+
 #Install poetry packages
-echo "C. Installing poetry packages"
+echo "D. Installing poetry and pip packages"
 cd ./turtlifier && poetry install
-echo "C. Poetry packages installed"
+
+echo "D. Poetry packages installed"
+
+# May need to also install packages with pip for the executable to work
+# cat requirements.txt | xargs -n 1 pip install
+
+echo "E. Creating executable file"
+./buildExecutable.sh
+
+rm -rf ./build
+cp ./dist/server ../turtlifierApp
+
+rm -rf ./dist
+
+cd ..
+chmod +x turtlifierApp
 
 echo "Installation completed"
 echo "Running the project"
-poetry run start
+./turtlifierApp

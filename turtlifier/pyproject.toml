@@ -17,7 +17,6 @@ pytest = "^5.2"
 
 [tool.poetry.scripts]
 start = "turtlifier.server:start"
-config = "turtlifier.config:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
