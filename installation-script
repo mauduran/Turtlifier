@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#Install React Front-end dependencies
+echo "A. Installing Front-end dependencies"
+cd ./turtl-front/turtl-front/ && npm i -f && cd ../../
+echo "A. Front-end dependencies installed"
+
+#Build the React Front-end
+echo "B. Building react project"
+cd ./turtl-front/turtl-front/ && npm run build && cd ../../
+echo "B. Finished building react project"
+
+#Install poetry packages
+echo "C. Installing poetry packages"
+cd ./turtlifier && poetry install
+echo "C. Poetry packages installed"
+
+echo "Installation completed"
+echo "Running the project"
+poetry run start
