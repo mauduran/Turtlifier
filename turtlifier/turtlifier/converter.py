@@ -49,11 +49,6 @@ class Converter:
         return g.serialize(format='turtle')
 
 
-    
-
-if __name__ == '__main__':
-    text_field = ['"adresse";"arrdt";"type de kiosque"', '"3placeDesDeuxEcus";"75001";"Kiosque de presse"', '"placeDuPalaisRoyal/StHonore";"75001";"Kiosque de presse"', '"1boulevardDesCapucines/rueL.Legrand";"75002";"Kiosque de presse"', '"13boulevardMontmartre";"75002";"Kiosque de presse"', '"13boulevardStDenis";"75002";"Kiosque de presse"', '"11boulevardDesItaliens";"75002";"Kiosque de presse"', '"11placeDeLaRepublique";"75003";"Kiosque de presse"']
-    print(Converter.turtlify(text_field))
 
 
 
