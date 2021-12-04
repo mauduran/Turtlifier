@@ -1,7 +1,7 @@
 import './TurtlForm.css';
 import download from "downloadjs";
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -34,8 +34,8 @@ export default function TurtlForm() {
     const [titleLineNum, setTitleLineNum] = useState("");
     const [dataLineNum, setDataLineNum] = useState("");
     const [lastLineToProcess, setLastLineToProcess] = useState("");
-    const [subjectPrefix, setSubjectPrefix] = useState("s")
-    const [subjectPrefixUri, setSubjectPrefixUri] = useState("https://ex.org/data/");
+    const [dataPrefix, setDataPrefix] = useState("s")
+    const [dataPrefixUri, setDataPrefixUri] = useState("https://ex.org/data/");
     const [predicatePrefix, setPredicatePrefix] = useState("pred");
     const [predicatePrefixUri, setPredicatePrefixUri] = useState("https://ex.org/pred#");
     const [file, setFile] = useState('');
@@ -51,6 +51,32 @@ export default function TurtlForm() {
     const [loading, setLoading] = useState(true);
     const [uploadInProgress, setUploadInProgress] = useState(false);
 
+    useEffect(() => {
+        axios.get(`http://localhost:8000/config`)
+            .then(res => {
+                console.log("Response");
+                console.log(res);
+                //Set Title Tine to its default value#
+                setTitleLineNum(res.data.firstLineToProcess);
+                //Set Data Start Line to its default value
+                setDataLineNum(res.data.firstLineToProcess);
+                //Last line to process to its default value 
+                let lastLineToProcessStr = res.data.lastLineToProcess;
+                setLastLineToProcess(lastLineToProcessStr ? lastLineToProcessStr : '');//Validate if there is a value. if not use '' value
+                //Set Data prefix name to its default value
+                let dataPrefixStr = res.data.dataPrefix;
+                setDataPrefix(dataPrefixStr.charAt(0));
+                //Set Data prefix Uri to its default value
+                let dataPrefixUriStr = res.data.dataPrefixUri;
+                setDataPrefixUri(dataPrefixUriStr.substring(1).slice(0,-1));
+                //Set Prediate prefix to its default value
+                let predicatePrefixStr = res.data.predicatePrefix
+                setPredicatePrefix(predicatePrefixStr.charAt(0));
+                //Set Predicate Uri to its default value
+                let predicatePrefixUriStr = res.data.predicatePrefixUri
+                setPredicatePrefixUri(predicatePrefixUriStr.substring(1).slice(0,-1));
+            });
+    }, [])
 
     const onSubmit = async e => {
         e.preventDefault();
@@ -62,15 +88,15 @@ export default function TurtlForm() {
             formData.append('titleLineNum', titleLineNum);
         if (dataLineNum && dataLineNum !== "")
             formData.append('dataLineNum', dataLineNum);
-            
-        if (lastLineToProcess && lastLineToProcess !== "")
-            formData.append('lastLineToProcess', lastLineToProcess);
 
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('lastLineToProcess', lastLineToProcess);
 
-        formData.append('subjectPrefix', subjectPrefix);
-        formData.append('subjectPrefixUri', subjectPrefixUri);
+        if (lastLineToProcess && lastLineToProcess !== "")
+            formData.append('lastLineToProcess', lastLineToProcess);
+
+        formData.append('subjectPrefix', dataPrefix);
+        formData.append('subjectPrefixUri', dataPrefixUri);
         formData.append('predicatePrefix', predicatePrefix);
         formData.append('predicatePrefixUri', predicatePrefixUri);
         formData.append('hasTitles', hasTitles);
@@ -228,7 +254,7 @@ export default function TurtlForm() {
 
                     <div style={{ width: "100%" }}>
                         <Typography variant="h3" sx={{ fontSize: 16 }} color="text.primary">
-                            Subject prefix
+                            Data prefix
                         </Typography>
                         <Box
                             component="div"
@@ -251,8 +277,8 @@ export default function TurtlForm() {
                                     marginTop: "10px",
                                     width: "30%",
                                 }}
-                                value={subjectPrefix}
-                                onChange={(e) => setSubjectPrefix(e.target.value)} />
+                                value={dataPrefix}
+                                onChange={(e) => setDataPrefix(e.target.value)} />
 
                             <TextField
                                 id="subject-prefix-uri"
@@ -267,8 +293,8 @@ export default function TurtlForm() {
                                     marginTop: "10px",
                                     minWidth: "68%",
                                 }}
-                                value={subjectPrefixUri}
-                                onChange={(e) => setSubjectPrefixUri(e.target.value)} />
+                                value={dataPrefixUri}
+                                onChange={(e) => setDataPrefixUri(e.target.value)} />
 
                         </Box>
                     </div>
