@@ -5,8 +5,12 @@
 #Ignore the front and static folder in /turtlifier since this folders can be created by running npm run build inside /turtl-front/turtl-front
 turtlifier/static
 turtlifier/front
+turtlifier/turtlifier/static
+turtlifier/turtlifier/front
 
 # dependencies
+
+**/dist
 **/node_modules
 /.pnp
 .pnp.js
