@@ -55,9 +55,11 @@ class Converter:
             # According to the turtle rules, the subject needs to be in upper camel case, and the predicate in lower camel case. We are still treating the object as a Literal, so none of the camelcases will apply
             for i in range(0, len(headers)):
                 subj = dataPrefNs["subj" + str(idx)]
-                g.add((
-                    URIRef(subj), 
-                    URIRef(predicatePrefNs[Converter.to_lower_camel_case(headers[i])]),
-                    Literal(row[headers[i]])
-                ))
+                
+                if(row[headers[i]]):
+                    g.add((
+                        URIRef(subj), 
+                        URIRef(predicatePrefNs[Converter.to_lower_camel_case(headers[i])]),
+                        Literal(row[headers[i]])
+                    ))
         return g.serialize(format='turtle')

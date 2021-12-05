@@ -30,7 +30,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Make static dir static for it to be accesible for the UI application.
 app.mount(
     "/static",
