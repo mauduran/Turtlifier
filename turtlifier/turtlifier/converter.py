@@ -1,54 +1,65 @@
 import csv
-from rdflib import Graph, Literal, RDF, URIRef, Namespace #basic RDF handling
+from rdflib import Graph, Literal, RDF, URIRef, Namespace  # basic RDF handling
 
 
 class Converter:
+    @staticmethod
+    # Transform a string to upper camel case notation
+    def to_upper_camel_case(text) -> str:
+        s = text.split()
+        if len(text) == 0:
+            return text
+        return ''.join(i.capitalize() for i in s[0:])
 
-    #Transform a string to camel case notation
-    def to_camel_case(text) -> str:
-         # s = text.replace("-", " ").replace("_", " ")
+    @staticmethod
+    # Transform a string to lower camel case notation
+    def to_lower_camel_case(text) -> str:
         s = text.split()
         if len(text) == 0:
             return text
         return s[0] + ''.join(i.capitalize() for i in s[1:])
 
-    #receives a string and returns it turtlified 
-    def turtlify(file_text)-> str:
-        
-        #create graph to store the RDF triples
+    # receives a string and returns it turtlified
+    def turtlify(
+        file_text, 
+        separator=",", 
+        dataPrefix=("data",'http://example.org/data/'), #Prefix name and uri come as a tuple
+        predPrefix=("pred",'http://example.org/predicate/'), #Prefix name and uri come as a tuple
+        ) -> str:
+
+        # create graph to store the RDF triples
         g = Graph()
+
+        # prefixes to use
+        dataPrefNs = Namespace(dataPrefix[1])
+        predicatePrefNs = Namespace(predPrefix[1])
         
-        #TODO use the prefixes that the user submitted, or use the default ones
-        #prefixes to use
-        data = Namespace('http://example.org/data/')
-        predicate = Namespace('http://example.org/predicate/')
+        # Binding Prefixes
+        g.bind(dataPrefix[0], dataPrefNs)
+        g.bind(predPrefix[0], predicatePrefNs)
 
 
-        #TODO use the separator that the user submitted, or use the default one
-        #Parse the file_text to a csv dictionary
-        csvreader = csv.DictReader(file_text,quotechar='"',delimiter=';')
+        csvreader = csv.DictReader(
+            file_text, quotechar='"', delimiter=separator)
 
         # if the first row contains header information, retrieve it like so
         headers = csvreader.fieldnames
+        
 
-        #Convert the headers to camelcase to avoid formating errors further down the line
-        for i in range(len(headers)):
-            headers[i] = Converter.to_camel_case(headers[i])
+        # row is an array of the columns in the file, idx refers to the line number
+        for (idx, row) in enumerate(csvreader):
+            # Make sure to check the encoding of the strings in the array
 
-        for row in csvreader:
-            #row is an array of the columns in the file
-            #Make sure to check the encoding of the strings in the array
-            
-            #The subject will always be the same for each turtle attribute
-            g.add((URIRef(data+row[headers[0]]), RDF.type, Literal(headers[0])))
-           
-            #add the rest of the turtle triples according to the available headers
-            for i in range(1,len(headers)):
-                g.add((URIRef(data+row[headers[0]]), URIRef(predicate+headers[i]), Literal(row[headers[i]])))
-
+            # Take index or line number as the definition of the URI and main subject
+            # Proceed to add  predicates and objects to the turtle triple.
+            # According to the turtle rules, the subject needs to be in upper camel case, and the predicate in lower camel case. We are still treating the object as a Literal, so none of the camelcases will apply
+            for i in range(0, len(headers)):
+                subj = dataPrefNs["Subj" + str(idx)]
+                
+                if(row[headers[i]]):
+                    g.add((
+                        URIRef(subj), 
+                        URIRef(predicatePrefNs[Converter.to_lower_camel_case(headers[i])]),
+                        Literal(row[headers[i]])
+                    ))
         return g.serialize(format='turtle')
-
-
-
-
-

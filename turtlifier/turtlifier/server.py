@@ -15,10 +15,13 @@ from turtlifier.converter import Converter
 
 app = FastAPI()
 
-templates = Jinja2Templates(directory=path.join(path.dirname(__file__),'front'))
+# Set front as the directory to grab html templates from (only contains the index.html with is the form to turtlify)
+templates = Jinja2Templates(
+    directory=path.join(path.dirname(__file__), 'front'))
+
+# Cors Config to allow API calls from different origins
 
 origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -27,12 +30,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory=path.join(path.dirname(__file__),'static')), name="static")
+# Make static dir static for it to be accesible for the UI application.
+app.mount(
+    "/static",
+    StaticFiles(directory=path.join(path.dirname(__file__), 'static')),
+    name="static")
+
 
 @app.post("/turtlify")
 async def turtlify(
-    file: UploadFile = File(...), 
-    separator: str = Form(...), 
+    file: UploadFile = File(...),
+    separator: str = Form(...),
     # has_titles: bool = Form(...),
     # prefix_data: str = Form(...),
     # prefix_data_uri: str = Form(...),
@@ -42,7 +50,7 @@ async def turtlify(
     # data_line_num: int = Form(...),
     # first_line_to_process: int = Form(...),
     # last_line_to_process: int = Form(...),
-    ):
+):
     # Get filename
     file_name = file.filename
     # Remove ext from filename
@@ -50,14 +58,17 @@ async def turtlify(
     # Read incoming file
     data = await file.read()
     file_text = []
-    
+
     # Parse csv
-    #read data line by line
+    # read data line by line
     for line in data.splitlines():
-        file_text.append(str(line, 'utf-8'))
+        line = str(line, 'utf-8')
+        if(line.strip() == ""):
+            continue
+        file_text.append(line)
 
     # Generate Turtl
-    turtlified_text = Converter.turtlify(file_text)
+    turtlified_text = Converter.turtlify(file_text, separator)
 
     # Write turtl into temp file
     output_file_name = file_name_no_ext + ".ttl"
@@ -67,27 +78,33 @@ async def turtlify(
     f.close()
 
     return FileResponse(
-        path= output_file_name, 
-        media_type="text/turtle", 
-        filename=output_file_name, 
+        path=output_file_name,
+        media_type="text/turtle",
+        filename=output_file_name,
         background=BackgroundTask(cleanup, output_file_name)
     )
+
 
 @app.get("/config")
 def get_config():
     return Config.get_config()
 
+
 @app.get("/{full_path:path}")
 async def webApp(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
 def cleanup(file_name: str):
     os.remove(file_name)
-    
+
+
 def start():
     """Launch server for turtlifier"""
     webbrowser.open_new("http://localhost:8000")
-    uvicorn.run("turtlifier.server:app", host="0.0.0.0", port=8000, reload=False, workers=1)
-    
+    uvicorn.run("turtlifier.server:app", host="0.0.0.0",
+                port=8000, reload=False, workers=1)
+
+
 if __name__ == "__main__":
     start()
