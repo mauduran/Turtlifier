@@ -54,7 +54,7 @@ class Converter:
             # Proceed to add  predicates and objects to the turtle triple.
             # According to the turtle rules, the subject needs to be in upper camel case, and the predicate in lower camel case. We are still treating the object as a Literal, so none of the camelcases will apply
             for i in range(0, len(headers)):
-                subj = dataPrefNs["subj" + str(idx)]
+                subj = dataPrefNs["Subj" + str(idx)]
                 
                 if(row[headers[i]]):
                     g.add((
