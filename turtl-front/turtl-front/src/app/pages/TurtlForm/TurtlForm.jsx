@@ -68,13 +68,15 @@ export default function TurtlForm() {
                 setDataPrefix(dataPrefixStr.charAt(0));
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
-                setDataPrefixUri(dataPrefixUriStr.substring(1).slice(0,-1));
+                setDataPrefixUri(dataPrefixUriStr.substring(1).slice(0, -1));
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
                 setPredicatePrefix(predicatePrefixStr.charAt(0));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
-                setPredicatePrefixUri(predicatePrefixUriStr.substring(1).slice(0,-1));
+                setPredicatePrefixUri(predicatePrefixUriStr.substring(1).slice(0, -1));
+                //Set Separator to its default value
+                setSeparator(res.data.separator);
             });
     }, [])
 
