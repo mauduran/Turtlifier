@@ -63,9 +63,9 @@ export default function TurtlForm() {
     const [uploadInProgress, setUploadInProgress] = useState(false);
 
     useEffect(() => {
+        // Get default configuration from server (which reads from config.ini file)
         axios.get(`/config`)
             .then(res => {
-                console.log("Response");
                 //Set Title Tine to its default value#
                 setTitleLineNum(parseInt(res.data.titleLineNum));
                 //Set Data Start Line to its default value
@@ -132,7 +132,6 @@ export default function TurtlForm() {
             });
 
             download(responseFile.data, fileName.split('.')[0] + '.ttl');
-            setmessage('File Uploaded!');
         } catch (error) {
             if (error.response.status === 500) {
                 setmessage("There was a problem with the server");
@@ -149,8 +148,6 @@ export default function TurtlForm() {
         setFile(e.target.files[0]);
         setfileName(e.target.files[0].name.replace(".csv", ""));
     }
-
-
 
     return (
         <Card sx={{
@@ -392,7 +389,7 @@ export default function TurtlForm() {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            contentEditable={false}
+                            onChange={(event)=>setfileName(event.target.value)}
                             sx={{ flex: 1, flexGrow: 1, marginLeft: "10px" }}
                             variant="standard"
                             required
