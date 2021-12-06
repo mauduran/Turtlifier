@@ -26,7 +26,7 @@ cd ./turtlifier && poetry install
 echo "D. Poetry packages installed"
 
 # May need to also install packages with pip for the executable to work
-poetry run pip freeze
+poetry run pip freeze > requirements.txt
 cat requirements.txt | xargs -n 1 pip install
 
 echo "E. Creating executable file"
