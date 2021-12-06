@@ -1,4 +1,3 @@
-
 ############################################
 ############################################
 ###     Date: December 7, 2021           ###
@@ -7,6 +6,7 @@
 ###     @author Alfonso Ramírez Casto    ###
 ############################################
 ############################################
+
 
 import uvicorn
 import webbrowser
@@ -51,7 +51,7 @@ app.mount(
 async def turtlify(
     file: UploadFile = File(...),
     separator: str = Form(...),
-    # has_titles: bool = Form(...),
+    has_titles: bool = Form(...),
     # prefix_data: str = Form(...),
     # prefix_data_uri: str = Form(...),
     # prefix_predicate: str = Form(...),
@@ -77,6 +77,10 @@ async def turtlify(
             continue
         file_text.append(line)
 
+    if(not has_titles and len(line)>0):
+        titles = Converter.generate_title_line(line[0])
+        file_text.insert(0, titles)
+        
     # Generate Turtl
     turtlified_text = Converter.turtlify(file_text, separator)
 

@@ -1,4 +1,3 @@
-
 ############################################
 ############################################
 ###     Date: December 7, 2021           ###
@@ -9,9 +8,8 @@
 ############################################
 
 import csv
-from rdflib import Graph, Literal, RDF, URIRef, Namespace  # basic RDF handling
-
-
+from rdflib import Graph, Literal, URIRef, Namespace  # basic RDF handling
+    
 class Converter:
     @staticmethod
     # Transform a string to upper camel case notation
@@ -28,6 +26,13 @@ class Converter:
         if len(text) == 0:
             return text
         return s[0] + ''.join(i.capitalize() for i in s[1:])
+    
+    # Function to generate title line if it is not included in the csv
+    # Predicates will be generated in the form of "predicate0"
+    @staticmethod
+    def generate_title_line(line: str, separator: str  = ",") -> str:
+        size = len(line.split(separator))
+        return separator.join([f"predicate{i}" for i in range(0, size)])
 
     # receives a string and returns it turtlified
     def turtlify(
