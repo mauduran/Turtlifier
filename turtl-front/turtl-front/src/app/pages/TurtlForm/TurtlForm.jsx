@@ -79,14 +79,17 @@ export default function TurtlForm() {
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
                 setDataPrefixUri(dataPrefixUriStr.replace("<","").replace(">",""));
+          
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
                 setPredicatePrefix(predicatePrefixStr.replace(":",""));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
+
                 setPredicatePrefixUri(predicatePrefixUriStr.replace("<","").replace(">",""));
                 //Set Separator to its default value
                 setSeparator(res.data.separator);
+
             });
     }, [])
 
@@ -100,13 +103,10 @@ export default function TurtlForm() {
             formData.append('titleLineNum', titleLineNum);
         if (dataLineNum && dataLineNum !== "")
             formData.append('dataLineNum', dataLineNum);
-
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('lastLineToProcess', lastLineToProcess);
-
-        if (lastLineToProcess && lastLineToProcess !== "")
-            formData.append('lastLineToProcess', lastLineToProcess);
-
+        else if (lastLineToProcess === "")
+            formData.append('lastLineToProcess', -1)
         formData.append('subjectPrefix', dataPrefix);
         formData.append('subjectPrefixUri', dataPrefixUri);
         formData.append('predicatePrefix', predicatePrefix);
@@ -207,6 +207,7 @@ export default function TurtlForm() {
                                 }
                             }}
                             variant="standard"
+                            required
                             value={titleLineNum}
                             onChange={(e) => setTitleLineNum(e.target.value)}
                         />
@@ -225,6 +226,7 @@ export default function TurtlForm() {
                                 }
                             }}
                             variant="standard"
+                            required
                             value={dataLineNum}
                             onChange={(e) => setDataLineNum(e.target.value)}
                         />
@@ -290,6 +292,7 @@ export default function TurtlForm() {
                                     width: "30%",
                                 }}
                                 value={dataPrefix}
+                                required
                                 onChange={(e) => setDataPrefix(e.target.value)} />
 
                             <TextField
@@ -306,6 +309,7 @@ export default function TurtlForm() {
                                     minWidth: "68%",
                                 }}
                                 value={dataPrefixUri}
+                                required
                                 onChange={(e) => setDataPrefixUri(e.target.value)} />
 
                         </Box>
@@ -337,6 +341,7 @@ export default function TurtlForm() {
                                     width: "30%",
                                 }}
                                 value={predicatePrefix}
+                                required
                                 onChange={(e) => setPredicatePrefix(e.target.value)} />
 
                             <TextField
@@ -353,6 +358,7 @@ export default function TurtlForm() {
                                     minWidth: "68%",
                                 }}
                                 value={predicatePrefixUri}
+                                required
                                 onChange={(e) => setPredicatePrefixUri(e.target.value)} />
 
                         </Box>
@@ -385,6 +391,7 @@ export default function TurtlForm() {
                             contentEditable={false}
                             sx={{ flex: 1, flexGrow: 1, marginLeft: "10px" }}
                             variant="standard"
+                            required
                             value={fileName}
                         />
                     </Box>
