@@ -1,3 +1,13 @@
+/*
+############################################
+############################################
+###     Date: December 7, 2021           ###
+###     @author Mauricio Duran Padilla   ###
+###     @author Juan Pablo Ramos Robles  ###
+###     @author Alfonso Ramírez Casto    ###
+############################################
+############################################
+*/
 import './TurtlForm.css';
 import download from "downloadjs";
 import axios from 'axios';
@@ -65,16 +75,21 @@ export default function TurtlForm() {
                 setLastLineToProcess(lastLineToProcessStr ? lastLineToProcessStr : '');//Validate if there is a value. if not use '' value
                 //Set Data prefix name to its default value
                 let dataPrefixStr = res.data.dataPrefix;
-                setDataPrefix(dataPrefixStr.charAt(0));
+                setDataPrefix(dataPrefixStr.replace(":",""));
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
-                setDataPrefixUri(dataPrefixUriStr.substring(1).slice(0, -1));
+                setDataPrefixUri(dataPrefixUriStr.replace("<","").replace(">",""));
+          
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
-                setPredicatePrefix(predicatePrefixStr.charAt(0));
+                setPredicatePrefix(predicatePrefixStr.replace(":",""));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
-                setPredicatePrefixUri(predicatePrefixUriStr.substring(1).slice(0, -1));
+
+                setPredicatePrefixUri(predicatePrefixUriStr.replace("<","").replace(">",""));
+                //Set Separator to its default value
+                setSeparator(res.data.separator);
+
             });
     }, [])
 
