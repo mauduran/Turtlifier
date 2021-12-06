@@ -55,7 +55,6 @@ export default function TurtlForm() {
         axios.get(`http://localhost:8000/config`)
             .then(res => {
                 console.log("Response");
-                console.log(res);
                 //Set Title Tine to its default value#
                 setTitleLineNum(res.data.firstLineToProcess);
                 //Set Data Start Line to its default value
@@ -83,26 +82,21 @@ export default function TurtlForm() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('separator', separator);
-        formData.append('hasTitles', hasTitles);
+        formData.append('has_titles', hasTitles);
         if (titleLineNum && titleLineNum !== "")
             formData.append('titleLineNum', titleLineNum);
         if (dataLineNum && dataLineNum !== "")
-            formData.append('dataLineNum', dataLineNum);
+            formData.append('data_line_num', dataLineNum);
 
         if (lastLineToProcess && lastLineToProcess !== "")
-            formData.append('lastLineToProcess', lastLineToProcess);
+            formData.append('last_line_to_process', lastLineToProcess);
+            
+        formData.append('subject_prefix', dataPrefix);
+        formData.append('subject_prefix_uri', dataPrefixUri);
+        formData.append('predicate_prefix', predicatePrefix);
+        formData.append('predicate_prefix_uri', predicatePrefixUri);
+        formData.append('has_titles', hasTitles);
 
-        if (lastLineToProcess && lastLineToProcess !== "")
-            formData.append('lastLineToProcess', lastLineToProcess);
-
-        formData.append('subjectPrefix', dataPrefix);
-        formData.append('subjectPrefixUri', dataPrefixUri);
-        formData.append('predicatePrefix', predicatePrefix);
-        formData.append('predicatePrefixUri', predicatePrefixUri);
-        formData.append('hasTitles', hasTitles);
-
-        console.log("FORM DATA");
-        console.log(formData);
         try {
             const responseFile = await axios.post('/turtlify', formData, {
                 headers: {
