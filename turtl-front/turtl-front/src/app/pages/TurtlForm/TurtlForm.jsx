@@ -8,6 +8,7 @@
 ############################################
 ############################################
 */
+
 import './TurtlForm.css';
 import download from "downloadjs";
 import axios from 'axios';
@@ -56,22 +57,23 @@ export default function TurtlForm() {
 
     // Progress Bar
     const [uploadPercentage, setuploadPercentage] = useState(0);
-
+    
     // Spinner
     const [loading, setLoading] = useState(true);
     const [uploadInProgress, setUploadInProgress] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/config`)
+        axios.get(`/config`)
             .then(res => {
                 console.log("Response");
                 //Set Title Tine to its default value#
-                setTitleLineNum(res.data.firstLineToProcess);
+                setTitleLineNum(parseInt(res.data.titleLineNum));
                 //Set Data Start Line to its default value
-                setDataLineNum(res.data.firstLineToProcess);
+                setDataLineNum(parseInt(res.data.dataLineNum));
+
                 //Last line to process to its default value 
                 let lastLineToProcessStr = res.data.lastLineToProcess;
-                setLastLineToProcess(lastLineToProcessStr ? lastLineToProcessStr : '');//Validate if there is a value. if not use '' value
+                setLastLineToProcess(lastLineToProcessStr ? parseInt(lastLineToProcessStr) : '');//Validate if there is a value. if not use '' value
                 //Set Data prefix name to its default value
                 let dataPrefixStr = res.data.dataPrefix;
                 setDataPrefix(dataPrefixStr.replace(":",""));
@@ -99,18 +101,23 @@ export default function TurtlForm() {
         formData.append('separator', separator);
         formData.append('has_titles', hasTitles);
         if (titleLineNum && titleLineNum !== "")
-            formData.append('titleLineNum', titleLineNum);
+            formData.append('title_line_num', titleLineNum);
+        else 
+            formData.append('title_line_num', 1);
         if (dataLineNum && dataLineNum !== "")
             formData.append('data_line_num', dataLineNum);
+        else 
+            formData.append('data_line_num', 2);
 
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('last_line_to_process', lastLineToProcess);
-        else formData.append('last_line_to_process', -1);
+        else 
+            formData.append('last_line_to_process', -1);
             
-        formData.append('subject_prefix', dataPrefix);
-        formData.append('subject_prefix_uri', dataPrefixUri);
-        formData.append('predicate_prefix', predicatePrefix);
-        formData.append('predicate_prefix_uri', predicatePrefixUri);
+        formData.append('prefix_data', dataPrefix);
+        formData.append('prefix_data_uri', dataPrefixUri);
+        formData.append('prefix_predicate', predicatePrefix);
+        formData.append('prefix_predicate_uri', predicatePrefixUri);
         formData.append('has_titles', hasTitles);
 
         try {
@@ -139,9 +146,8 @@ export default function TurtlForm() {
         if (!e.target.files || !e.target.files.length || !e.target.files[0]) {
             setmessage("No File Added.")
         }
-        console.log(e.target);
         setFile(e.target.files[0]);
-        setfileName(e.target.files[0].name);
+        setfileName(e.target.files[0].name.replace(".csv", ""));
     }
 
 

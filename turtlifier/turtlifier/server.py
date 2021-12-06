@@ -52,14 +52,13 @@ async def turtlify(
     file: UploadFile = File(...),
     separator: str = Form(...),
     has_titles: bool = Form(...),
-    # prefix_data: str = Form(...),
-    # prefix_data_uri: str = Form(...),
-    # prefix_predicate: str = Form(...),
-    # prefix_predicate_uri: str = Form(...),
-    # title_line_num: int = Form(...),
-    # data_line_num: int = Form(...),
-    # first_line_to_process: int = Form(...),
-    # last_line_to_process: int = Form(...),
+    prefix_data: str = Form(...),
+    prefix_data_uri: str = Form(...),
+    prefix_predicate: str = Form(...),
+    prefix_predicate_uri: str = Form(...),
+    title_line_num: int = Form(...),
+    data_line_num: int = Form(...),
+    last_line_to_process: int = Form(...),
 ):
     # Get filename
     file_name = file.filename
@@ -67,6 +66,8 @@ async def turtlify(
     file_name_no_ext = file_name.split('.')[0]
     # Read incoming file
     data = await file.read()
+    
+    # Array of lines of the text excluding empty lines
     file_text = []
 
     # Parse csv
@@ -77,12 +78,18 @@ async def turtlify(
             continue
         file_text.append(line)
 
-    if(not has_titles and len(line)>0):
+    # If csv does not include titles, generate them and add them to file_text
+    if(not has_titles and len(line) > 0):
         titles = Converter.generate_title_line(line[0])
         file_text.insert(0, titles)
-        
-    # Generate Turtl
-    turtlified_text = Converter.turtlify(file_text, separator)
+
+    # Generate Turtl. Requires the file_text, separator and prefizes for data and predicate.
+    turtlified_text = Converter.turtlify(
+        file_text=file_text,
+        separator=separator,
+        dataPrefix=(prefix_data, prefix_data_uri),
+        predPrefix=(prefix_predicate, prefix_predicate_uri)
+    )
 
     # Write turtl into temp file
     output_file_name = file_name_no_ext + ".ttl"
