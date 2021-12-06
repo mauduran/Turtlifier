@@ -1,11 +1,11 @@
-###############################################
-###############################################
-###     Date: December 7, 2021              ###
-###     @author Mauricio Duran Padilla      ###
-###     @author Juan Pablo Ramos Robles     ###
-###     @author Alfonso Ramírez Casto       ###
-###############################################
-###############################################
+############################################
+############################################
+###     Date: December 7, 2021           ###
+###     @author Mauricio Duran Padilla   ###
+###     @author Juan Pablo Ramos Robles  ###
+###     @author Alfonso Ramírez Casto    ###
+############################################
+############################################
 
 import csv
 from rdflib import Graph, Literal, URIRef, Namespace  # basic RDF handling
