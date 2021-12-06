@@ -80,7 +80,7 @@ async def turtlify(
 
     # If csv does not include titles, generate them and add them to file_text
     if(not has_titles and len(line) > 0):
-        titles = Converter.generate_title_line(line[0])
+        titles = Converter.generate_title_line(line,separator)
         file_text.insert(0, titles)
 
     # Generate Turtl. Requires the file_text, separator and prefizes for data and predicate.
