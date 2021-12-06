@@ -71,7 +71,7 @@ export default function TurtlForm() {
                 setDataPrefixUri(dataPrefixUriStr.replace("<","").replace(">",""));
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
-                setPredicatePrefix(predicatePrefixStr.charAt(0));
+                setPredicatePrefix(predicatePrefixStr.replace(":",""));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
                 setPredicatePrefixUri(predicatePrefixUriStr.replace("<","").replace(">",""));
