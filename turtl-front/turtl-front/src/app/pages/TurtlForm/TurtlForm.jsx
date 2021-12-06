@@ -51,21 +51,24 @@ export default function TurtlForm() {
     const [predicatePrefixUri, setPredicatePrefixUri] = useState("https://ex.org/pred#");
     const [file, setFile] = useState('');
     const [fileName, setfileName] = useState("");
+    const [loaded, setLoaded] = useState(false)
+    const [errorLoading, seterrorLoading] = useState(false)
 
     // Notification Alert
     const [message, setmessage] = useState('');
 
     // Progress Bar
     const [uploadPercentage, setuploadPercentage] = useState(0);
-    
+
     // Spinner
     const [loading, setLoading] = useState(true);
     const [uploadInProgress, setUploadInProgress] = useState(false);
 
     useEffect(() => {
         // Get default configuration from server (which reads from config.ini file)
-        axios.get(`/config`)
+        axios.get(`http://localhost:8000/config`)
             .then(res => {
+                if (res.status !== 200) setLoaded(true);
                 //Set Title Tine to its default value#
                 setTitleLineNum(parseInt(res.data.titleLineNum));
                 //Set Data Start Line to its default value
@@ -76,18 +79,17 @@ export default function TurtlForm() {
                 setLastLineToProcess(lastLineToProcessStr ? parseInt(lastLineToProcessStr) : '');//Validate if there is a value. if not use '' value
                 //Set Data prefix name to its default value
                 let dataPrefixStr = res.data.dataPrefix;
-                setDataPrefix(dataPrefixStr.replace(":",""));
+                setDataPrefix(dataPrefixStr.replace(":", ""));
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
-                setDataPrefixUri(dataPrefixUriStr.replace("<","").replace(">",""));
-          
+                setDataPrefixUri(dataPrefixUriStr.replace("<", "").replace(">", ""));
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
-                setPredicatePrefix(predicatePrefixStr.replace(":",""));
+                setPredicatePrefix(predicatePrefixStr.replace(":", ""));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
 
-                setPredicatePrefixUri(predicatePrefixUriStr.replace("<","").replace(">",""));
+                setPredicatePrefixUri(predicatePrefixUriStr.replace("<", "").replace(">", ""));
                 //Set Separator to its default value
                 setSeparator(res.data.separator);
 
@@ -102,18 +104,18 @@ export default function TurtlForm() {
         formData.append('has_titles', hasTitles);
         if (titleLineNum && titleLineNum !== "")
             formData.append('title_line_num', titleLineNum);
-        else 
+        else
             formData.append('title_line_num', 1);
         if (dataLineNum && dataLineNum !== "")
             formData.append('data_line_num', dataLineNum);
-        else 
+        else
             formData.append('data_line_num', 2);
 
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('last_line_to_process', lastLineToProcess);
-        else 
+        else
             formData.append('last_line_to_process', -1);
-            
+
         formData.append('prefix_data', dataPrefix);
         formData.append('prefix_data_uri', dataPrefixUri);
         formData.append('prefix_predicate', predicatePrefix);
@@ -135,6 +137,7 @@ export default function TurtlForm() {
         } catch (error) {
             if (error.response.status === 500) {
                 setmessage("There was a problem with the server");
+                seterrorLoading(true)
             } else {
                 setmessage(error.response.data.msg)
             }
@@ -169,7 +172,9 @@ export default function TurtlForm() {
                     <Typography variant="h2" sx={{ width: "100%", fontSize: 22, textAlign: "center" }} color="text.primary" gutterBottom>
                         Convert your csv files into Turtl RDF triples!
                     </Typography>
-
+                    {
+                        (loaded && <span style={{ color: 'red', fontSize: '12px' }}>There was an error loading the configuration values</span>)
+                    }
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -389,13 +394,16 @@ export default function TurtlForm() {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(event)=>setfileName(event.target.value)}
+                            onChange={(event) => setfileName(event.target.value)}
                             sx={{ flex: 1, flexGrow: 1, marginLeft: "10px" }}
                             variant="standard"
                             required
                             value={fileName}
                         />
                     </Box>
+                    {
+                        (errorLoading && <span style={{ color: 'red', fontSize: '12px' }}>There was an error procesing the file</span>)
+                    }
                 </CardContent>
 
                 <div className="dividr" />
