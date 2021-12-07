@@ -1,0 +1,69 @@
+@prefix d: <http://ex.org/data/> .
+@prefix p: <http://ex.org/pred#> .
+
+d:Subj0 p:predicate0 "5.1" ;
+    p:predicate1 "3.5" ;
+    p:predicate2 "1.4" ;
+    p:predicate3 "0.2" ;
+    p:predicate4 "setosa" .
+
+d:Subj1 p:predicate0 "4.9" ;
+    p:predicate1 "3.0" ;
+    p:predicate2 "1.4" ;
+    p:predicate3 "0.2" ;
+    p:predicate4 "αβγ" .
+
+d:Subj10 p:predicate0 "7.7" ;
+    p:predicate1 "2.8" ;
+    p:predicate2 "6.7" ;
+    p:predicate3 "2.0" ;
+    p:predicate4 "virginica" .
+
+d:Subj2 p:predicate0 "5.0" ;
+    p:predicate1 "3.4" ;
+    p:predicate2 "1.5" ;
+    p:predicate3 "0.2" ;
+    p:predicate4 "setosa" .
+
+d:Subj3 p:predicate0 "7.0" ;
+    p:predicate1 "3.2" ;
+    p:predicate2 "4.7" ;
+    p:predicate3 "1.4" ;
+    p:predicate4 "Здравствуйте" .
+
+d:Subj4 p:predicate0 "6.4" ;
+    p:predicate1 "3.2" ;
+    p:predicate2 "4.5" ;
+    p:predicate3 "1.5" ;
+    p:predicate4 "versicolor" .
+
+d:Subj5 p:predicate0 "6.9" ;
+    p:predicate1 "3.1" ;
+    p:predicate2 "4.9" ;
+    p:predicate3 "1.5" ;
+    p:predicate4 "versicolor" .
+
+d:Subj6 p:predicate0 "5.9" ;
+    p:predicate1 "3.0" ;
+    p:predicate2 "4.2" ;
+    p:predicate3 "1.5" ;
+    p:predicate4 "versicolor" .
+
+d:Subj7 p:predicate0 "5.8" ;
+    p:predicate1 "2.8" ;
+    p:predicate2 "5.1" ;
+    p:predicate3 "2.4" ;
+    p:predicate4 "virginica" .
+
+d:Subj8 p:predicate0 "6.4" ;
+    p:predicate1 "3.2" ;
+    p:predicate2 "5.3" ;
+    p:predicate3 "2.3" ;
+    p:predicate4 "virginica" .
+
+d:Subj9 p:predicate0 "5.6" ;
+    p:predicate1 "2.8" ;
+    p:predicate2 "4.9" ;
+    p:predicate3 "2.0" ;
+    p:predicate4 "virginica" .
+

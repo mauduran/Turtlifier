@@ -1,0 +1,95 @@
+@prefix d: <http://ex.org/data/> .
+@prefix p: <http://ex.org/pred#> .
+
+d:Subj0 p:date "21-07-2015" ;
+    p:itemdescription "tropical fruit" ;
+    p:member_number "1808" .
+
+d:Subj1 p:date "05-01-2015" ;
+    p:itemdescription "whole milk" ;
+    p:member_number "2552" .
+
+d:Subj10 p:date "24-02-2015" ;
+    p:itemdescription "citrus fruit" ;
+    p:member_number "1340" .
+
+d:Subj11 p:date "14-04-2015" ;
+    p:itemdescription "beef" ;
+    p:member_number "2193" .
+
+d:Subj12 p:date "21-07-2015" ;
+    p:itemdescription "frankfurter" ;
+    p:member_number "1997" .
+
+d:Subj13 p:date "03-09-2015" ;
+    p:itemdescription "chicken" ;
+    p:member_number "4546" .
+
+d:Subj14 p:date "21-07-2015" ;
+    p:itemdescription "butter" ;
+    p:member_number "4736" .
+
+d:Subj15 p:date "30-03-2015" ;
+    p:itemdescription "fruit/vegetable juice" ;
+    p:member_number "1959" .
+
+d:Subj16 p:date "03-05-2015" ;
+    p:itemdescription "packaged fruit/vegetables" ;
+    p:member_number "1974" .
+
+d:Subj17 p:date "02-09-2015" ;
+    p:itemdescription "chocolate" ;
+    p:member_number "2421" .
+
+d:Subj18 p:date "03-08-2015" ;
+    p:itemdescription "specialty bar" ;
+    p:member_number "1513" .
+
+d:Subj19 p:date "07-07-2015" ;
+    p:itemdescription "other vegetables" ;
+    p:member_number "1905" .
+
+d:Subj2 p:date "19-09-2015" ;
+    p:itemdescription "pip fruit" ;
+    p:member_number "2300" .
+
+d:Subj20 p:date "08-09-2015" ;
+    p:itemdescription "butter milk" ;
+    p:member_number "2810" .
+
+d:Subj21 p:date "12-11-2015" ;
+    p:itemdescription "whole milk" ;
+    p:member_number "2867" .
+
+d:Subj22 p:date "18-09-2015" ;
+    p:itemdescription "tropical fruit" ;
+    p:member_number "3962" .
+
+d:Subj3 p:date "12-12-2015" ;
+    p:itemdescription "other vegetables" ;
+    p:member_number "1187" .
+
+d:Subj4 p:date "01-02-2015" ;
+    p:itemdescription "whole milk" ;
+    p:member_number "3037" .
+
+d:Subj5 p:date "14-02-2015" ;
+    p:itemdescription "rolls/buns" ;
+    p:member_number "4941" .
+
+d:Subj6 p:date "08-05-2015" ;
+    p:itemdescription "other vegetables" ;
+    p:member_number "4501" .
+
+d:Subj7 p:date "23-12-2015" ;
+    p:itemdescription "pot plants" ;
+    p:member_number "3803" .
+
+d:Subj8 p:date "20-03-2015" ;
+    p:itemdescription "whole milk" ;
+    p:member_number "2762" .
+
+d:Subj9 p:date "12-02-2015" ;
+    p:itemdescription "tropical fruit" ;
+    p:member_number "4119" .
+
