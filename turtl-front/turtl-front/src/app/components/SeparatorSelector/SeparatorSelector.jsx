@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+//Component that shows a select input for the user to pick a separator
 export default function SeparatorSelector({ onChange, separator }) {
     return (
         <div>
@@ -28,6 +29,9 @@ export default function SeparatorSelector({ onChange, separator }) {
                     onChange={onChange}
                     
                 >
+                    {/* 
+                        All the valid options are shown and a related value is asigned.
+                    */}
                     <MenuItem value={","}>Comma ',' </MenuItem>
                     <MenuItem value={";"}>Semicolon ';' </MenuItem>
                     <MenuItem value={"|"}>Pipe '|' </MenuItem>
