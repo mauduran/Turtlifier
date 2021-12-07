@@ -40,6 +40,8 @@ const DarkButton = styled(Button)({
 
 
 export default function TurtlForm() {
+
+    // Definition of state, yields a variable holding a state and a function to change it.
     const [separator, setSeparator] = useState(",");
     const [hasTitles, setHasTitles] = useState(true);
     const [titleLineNum, setTitleLineNum] = useState("");
@@ -56,13 +58,6 @@ export default function TurtlForm() {
 
     // Notification Alert
     const [message, setmessage] = useState('');
-
-    // Progress Bar
-    const [uploadPercentage, setuploadPercentage] = useState(0);
-
-    // Spinner
-    const [loading, setLoading] = useState(true);
-    const [uploadInProgress, setUploadInProgress] = useState(false);
 
     useEffect(() => {
         // Get default configuration from server (which reads from config.ini file)
@@ -97,13 +92,24 @@ export default function TurtlForm() {
     }, [])
 
     const onSubmit = async e => {
+        //Prevent from from posting
         e.preventDefault();
         seterrorLoading(false)
+
+        // Formation of body to call turtle server.
         const formData = new FormData();
+
+        // Add file to file, separator and has_titles to body
         formData.append('file', file);
         formData.append('separator', separator);
         formData.append('has_titles', hasTitles);
 
+        /*  
+            Add title_line_num to body. 
+            if file does not have titles then this field is not important.
+            if file has titles and the user set a title line number, use it.
+            if no value if provided use 1 as a default. 
+        */
         if (!hasTitles)
             formData.append('title_line_num', -1);
         else if (titleLineNum && titleLineNum !== "")
@@ -111,6 +117,12 @@ export default function TurtlForm() {
         else
             formData.append('title_line_num', 1);
 
+        /*  
+            Add data_line_num to body. 
+            if user has set the value use that
+            if user did not provide value and file has no titles, use first line as default
+            if user did not provide value and file has titles, use second line as default
+        */
         if (dataLineNum && dataLineNum !== "")
             formData.append('data_line_num', dataLineNum);
         else if (!hasTitles)
@@ -118,35 +130,36 @@ export default function TurtlForm() {
         else
             formData.append('data_line_num', 2);
 
+        /*  
+            Add last line to process to body. 
+            If no value is defined use -1 as a value (this value is ignored in the server)
+        */
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('last_line_to_process', lastLineToProcess);
         else
             formData.append('last_line_to_process', -1);
 
+        // Append required arguments to body
         formData.append('prefix_data', dataPrefix);
         formData.append('prefix_data_uri', dataPrefixUri);
         formData.append('prefix_predicate', predicatePrefix);
         formData.append('prefix_predicate_uri', predicatePrefixUri);
         formData.append('has_titles', hasTitles);
 
-        // Display the key/value pairs
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
 
+        // Send request to turtlify to server
         try {
             const responseFile = await axios.post('/turtlify', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
                 responseType: 'blob',
-                onUploadProgress: progressEvent => {
-                    setuploadPercentage(parseInt(Math.round(progressEvent.loaded * 100 / progressEvent.total)))
-                }
             });
 
+            // Save file with the name the user stated.
             download(responseFile.data, fileName.split('.')[0] + '.ttl');
         } catch (error) {
+            // Indicates what happened if there is an error
             if (error.response.status === 500) {
                 setmessage("There was a problem with the server");
                 seterrorLoading(true)
@@ -157,20 +170,23 @@ export default function TurtlForm() {
         }
     }
 
+    // Function that handles when there was a change in a file input
     const onFileChange = async (e) => {
-        if (!e.target.files || !e.target.files.length || !e.target.files[0]) {
-            setmessage("No File Added.")
-        }
+        
+        // If target has file, store it in state.
         if (e.target.files && e.target.files.length) {
             setFile(e.target.files[0]);
             setfileName(e.target.files[0].name.replace(".csv", ""));
         } else {
+            //if not. Leave state empty
+            setmessage("No File Added.")
             setFile(null);
             setfileName("");
         }
     }
 
     return (
+        //Layout for the webpage
         <Card sx={{
             minWidth: "370px",
             width: "35%",
