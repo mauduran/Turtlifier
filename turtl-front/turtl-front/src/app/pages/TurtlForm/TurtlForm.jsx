@@ -51,6 +51,8 @@ export default function TurtlForm() {
     const [predicatePrefixUri, setPredicatePrefixUri] = useState("https://ex.org/pred#");
     const [file, setFile] = useState('');
     const [fileName, setfileName] = useState("");
+    const [loaded, setLoaded] = useState(false)
+    const [errorLoading, seterrorLoading] = useState(false)
 
     // Notification Alert
     const [message, setmessage] = useState('');
@@ -66,6 +68,7 @@ export default function TurtlForm() {
         // Get default configuration from server (which reads from config.ini file)
         axios.get(`/config`)
             .then(res => {
+                if (res.status !== 200) setLoaded(true);
                 //Set Title Tine to its default value#
                 setTitleLineNum(parseInt(res.data.titleLineNum || ''));
                 //Set Data Start Line to its default value
@@ -80,7 +83,6 @@ export default function TurtlForm() {
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
                 setDataPrefixUri(dataPrefixUriStr.replace("<", "").replace(">", ""));
-
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
                 setPredicatePrefix(predicatePrefixStr.replace(":", ""));
@@ -96,6 +98,7 @@ export default function TurtlForm() {
 
     const onSubmit = async e => {
         e.preventDefault();
+        seterrorLoading(false)
         const formData = new FormData();
         formData.append('file', file);
         formData.append('separator', separator);
@@ -146,8 +149,10 @@ export default function TurtlForm() {
         } catch (error) {
             if (error.response.status === 500) {
                 setmessage("There was a problem with the server");
+                seterrorLoading(true)
             } else {
                 setmessage(error.response.data.msg)
+                seterrorLoading(true)
             }
         }
     }
@@ -185,7 +190,9 @@ export default function TurtlForm() {
                     <Typography variant="h2" sx={{ width: "100%", fontSize: 22, textAlign: "center" }} color="text.primary" gutterBottom>
                         Convert your csv files into Turtl RDF triples!
                     </Typography>
-
+                    {
+                        (loaded && <span style={{ color: 'red', fontSize: '12px' }}>There was an error loading the configuration values from the config.ini file</span>)
+                    }
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -413,6 +420,9 @@ export default function TurtlForm() {
                             value={fileName}
                         />
                     </Box>
+                    {
+                        (errorLoading && <span style={{ color: 'red', fontSize: '12px' }}>There was an error procesing the file, there was a problem with the server</span>)
+                    }
                 </CardContent>
 
                 <div className="dividr" />
