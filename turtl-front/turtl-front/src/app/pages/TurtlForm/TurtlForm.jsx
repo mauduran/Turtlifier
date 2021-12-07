@@ -98,6 +98,7 @@ export default function TurtlForm() {
 
     const onSubmit = async e => {
         e.preventDefault();
+        seterrorLoading(false)
         const formData = new FormData();
         formData.append('file', file);
         formData.append('separator', separator);
