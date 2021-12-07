@@ -1,0 +1,111 @@
+@prefix pred: <https://ex.org/pred#> .
+@prefix s: <https://ex.org/data/> .
+
+s:Subj0 pred:adresse "3 PLACE DES DEUX ECUS" ;
+    pred:arrdt "75001" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj1 pred:adresse "PLACE DU PALAIS ROYAL / ST HONORE" ;
+    pred:arrdt "75001" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj10 pred:adresse "26 RUE VAVIN" ;
+    pred:arrdt "75006" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj11 pred:adresse "12 PLACE ST SULPICE" ;
+    pred:arrdt "75006" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj12 pred:adresse "4 PLACE DU 18 JUIN 1940" ;
+    pred:arrdt "75006" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj13 pred:adresse "26 RUE DE SEVRES" ;
+    pred:arrdt "75007" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj14 pred:adresse "ESPLANADE DES INVALIDES" ;
+    pred:arrdt "75007" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj15 pred:adresse "16 RUE ROYALE" ;
+    pred:arrdt "75008" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj16 pred:adresse "69 Avenue FRANKLIN ROOSEVELT" ;
+    pred:arrdt "75008" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj17 pred:adresse "21 RUE DE LIEGE" ;
+    pred:arrdt "75008" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj18 pred:adresse "101 Avenue DES CHAMPS ELYSEES" ;
+    pred:arrdt "75008" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj19 pred:adresse "32 Boulevard HAUSSMANN" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj2 pred:adresse "1 Boulevard DES CAPUCINES/RUE L.LEGRAND" ;
+    pred:arrdt "75002" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj20 pred:adresse "2 Boulevard HAUSSMANN" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj21 pred:adresse "2 Boulevard POISSONNIERE" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj22 pred:adresse "65 RUE LAFAYETTE" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj23 pred:adresse "4 PLACE GUSTAE TOUDOUZE" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj24 pred:adresse "PLACE DU HAvRE / COTE FNAC" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj25 pred:adresse "12 Boulevard DES CAPUCINES" ;
+    pred:arrdt "75009" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj26 pred:adresse "79 Boulevard DE STRASBOURG" ;
+    pred:arrdt "75010" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj3 pred:adresse "13 Boulevard MONTMARTRE" ;
+    pred:arrdt "75002" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj4 pred:adresse "13 Boulevard ST DENIS" ;
+    pred:arrdt "75002" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj5 pred:adresse "11 Boulevard DES ITALIENS" ;
+    pred:arrdt "75002" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj6 pred:adresse "11 PLACE DE LA REPUBLIQUE" ;
+    pred:arrdt "75003" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj7 pred:adresse "68 RUE DE RIVOLI" ;
+    pred:arrdt "75004" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj8 pred:adresse "65 Boulevard ST MICHEL" ;
+    pred:arrdt "75005" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
+s:Subj9 pred:adresse "170 Boulevard ST GERMAIN" ;
+    pred:arrdt "75006" ;
+    pred:typeDeKiosque "Kiosque de presse" .
+
