@@ -7,12 +7,11 @@
 ############################################
 ############################################
 
-
 import uvicorn
 import webbrowser
 import os
 from os import path
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from starlette.background import BackgroundTask
 from fastapi.datastructures import UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,7 +21,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from turtlifier.config import Config
 from turtlifier.converter import Converter
+from turtlifier.file_utils import FileUtils
 
+# Instanciation of API server
 app = FastAPI()
 
 # Set front as the directory to grab html templates from (only contains the index.html with is the form to turtlify)
@@ -30,7 +31,6 @@ templates = Jinja2Templates(
     directory=path.join(path.dirname(__file__), 'front'))
 
 # Cors Config to allow API calls from different origins
-
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -60,72 +60,93 @@ async def turtlify(
     data_line_num: int = Form(...),
     last_line_to_process: int = Form(...),
 ):
-    # Get filename
-    file_name = file.filename
-    # Remove ext from filename
-    file_name_no_ext = file_name.split('.')[0]
-    # Read incoming file
-    data = await file.read()
-    
-    # Array of lines of the text excluding empty lines
-    file_text = []
+    """Endpoint that receives the files and params from the client and returns turtl version of the file."""
+    try:
+        # Remove extension from filename
+        file_name_no_ext = file.filename.split('.')[0]
 
-    # Parse csv
-    # read data line by line
-    for line in data.splitlines():
-        line = str(line, 'utf-8')
-        if(line.strip() == ""):
-            continue
-        file_text.append(line)
+        # Read incoming file
+        data = await file.read()
 
-    # If csv does not include titles, generate them and add them to file_text
-    if(not has_titles and len(line) > 0):
-        titles = Converter.generate_title_line(line,separator)
-        file_text.insert(0, titles)
+        # Treat the data file, generate headers if they are not defined and return array of lines
+        file_text = Converter.read_csv_and_setup(
+            file_string=data,
+            separator=separator,
+            has_titles=has_titles,
+            title_line_num=title_line_num,
+            data_line_num=data_line_num,
+            last_line_to_process=last_line_to_process
+        )
+        
+        # Generate Turtl. Requires the file_text, separator and prefizes for data and predicate.
+        turtlified_text = Converter.turtlify(
+            file_text=file_text,
+            separator=separator,
+            dataPrefix=(prefix_data, prefix_data_uri),
+            predPrefix=(prefix_predicate, prefix_predicate_uri)
+        )
 
-    # Generate Turtl. Requires the file_text, separator and prefizes for data and predicate.
-    turtlified_text = Converter.turtlify(
-        file_text=file_text,
-        separator=separator,
-        dataPrefix=(prefix_data, prefix_data_uri),
-        predPrefix=(prefix_predicate, prefix_predicate_uri)
-    )
+        # Write turtl into temp file
+        output_file_name = file_name_no_ext + ".ttl"
 
-    # Write turtl into temp file
-    output_file_name = file_name_no_ext + ".ttl"
+        FileUtils.write_file(
+            output_file_name=output_file_name,
+            file_content=turtlified_text
+        )
 
-    f = open(output_file_name, "w")
-    f.write(turtlified_text)
-    f.close()
-
-    return FileResponse(
-        path=output_file_name,
-        media_type="text/turtle",
-        filename=output_file_name,
-        background=BackgroundTask(cleanup, output_file_name)
-    )
+        # Return generated file to client
+        return FileResponse(
+            # Location where temp file is stored
+            path=output_file_name,
+            # Define mime type of file
+            media_type="text/turtle",
+            filename=output_file_name,
+            # After sending the response, run background task to delete the temporary file
+            background=BackgroundTask(FileUtils.file_cleanup, output_file_name)
+        )
+    except Exception as error:
+        # Should any error be encountered, return error response to client.
+        raise HTTPException(
+            status_code=400,
+            detail=repr(error)
+        )
 
 
 @app.get("/config")
 def get_config():
-    return Config.get_config()
+    """Get default configuration for turtlifier from config.ini"""
+    try:
+        return Config.get_config()
+    except:
+        # Return error response message to client if config.ini is not able to be parsed.
+        raise HTTPException(
+            status_code=400, detail="Could not read config from config.ini")
 
 
 @app.get("/{full_path:path}")
 async def webApp(request: Request):
+    """Return Web UI when any other route  is hit."""
     return templates.TemplateResponse("index.html", {"request": request})
-
-
-def cleanup(file_name: str):
-    os.remove(file_name)
 
 
 def start():
     """Launch server for turtlifier"""
-    webbrowser.open_new("http://localhost:8000")
-    uvicorn.run("turtlifier.server:app", host="0.0.0.0",
-                port=8000, reload=False, workers=1)
 
+    # Define port to run app on.
+    port = 8000
 
+    # Open new tab in browser with the web app.
+    webbrowser.open_new(f"http://localhost:{port}")
+
+    # Launch and execute server
+    uvicorn.run(
+        "turtlifier.server:app",
+        host="0.0.0.0",
+        port=port,
+        reload=False,
+        workers=1
+    )
+
+# Start server if the file is executed 
 if __name__ == "__main__":
     start()
