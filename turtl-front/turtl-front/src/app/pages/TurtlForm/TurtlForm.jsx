@@ -57,7 +57,7 @@ export default function TurtlForm() {
 
     // Progress Bar
     const [uploadPercentage, setuploadPercentage] = useState(0);
-    
+
     // Spinner
     const [loading, setLoading] = useState(true);
     const [uploadInProgress, setUploadInProgress] = useState(false);
@@ -67,27 +67,27 @@ export default function TurtlForm() {
         axios.get(`/config`)
             .then(res => {
                 //Set Title Tine to its default value#
-                setTitleLineNum(parseInt(res.data.titleLineNum));
+                setTitleLineNum(parseInt(res.data.titleLineNum || ''));
                 //Set Data Start Line to its default value
-                setDataLineNum(parseInt(res.data.dataLineNum));
+                setDataLineNum(parseInt(res.data.dataLineNum || ''));
 
                 //Last line to process to its default value 
                 let lastLineToProcessStr = res.data.lastLineToProcess;
                 setLastLineToProcess(lastLineToProcessStr ? parseInt(lastLineToProcessStr) : '');//Validate if there is a value. if not use '' value
                 //Set Data prefix name to its default value
                 let dataPrefixStr = res.data.dataPrefix;
-                setDataPrefix(dataPrefixStr.replace(":",""));
+                setDataPrefix(dataPrefixStr.replace(":", ""));
                 //Set Data prefix Uri to its default value
                 let dataPrefixUriStr = res.data.dataPrefixUri;
-                setDataPrefixUri(dataPrefixUriStr.replace("<","").replace(">",""));
-          
+                setDataPrefixUri(dataPrefixUriStr.replace("<", "").replace(">", ""));
+
                 //Set Prediate prefix to its default value
                 let predicatePrefixStr = res.data.predicatePrefix
-                setPredicatePrefix(predicatePrefixStr.replace(":",""));
+                setPredicatePrefix(predicatePrefixStr.replace(":", ""));
                 //Set Predicate Uri to its default value
                 let predicatePrefixUriStr = res.data.predicatePrefixUri
 
-                setPredicatePrefixUri(predicatePrefixUriStr.replace("<","").replace(">",""));
+                setPredicatePrefixUri(predicatePrefixUriStr.replace("<", "").replace(">", ""));
                 //Set Separator to its default value
                 setSeparator(res.data.separator);
 
@@ -100,25 +100,36 @@ export default function TurtlForm() {
         formData.append('file', file);
         formData.append('separator', separator);
         formData.append('has_titles', hasTitles);
-        if (titleLineNum && titleLineNum !== "")
+
+        if (!hasTitles)
+            formData.append('title_line_num', -1);
+        else if (titleLineNum && titleLineNum !== "")
             formData.append('title_line_num', titleLineNum);
-        else 
+        else
             formData.append('title_line_num', 1);
+
         if (dataLineNum && dataLineNum !== "")
             formData.append('data_line_num', dataLineNum);
-        else 
+        else if (!hasTitles)
+            formData.append('data_line_num', 1);
+        else
             formData.append('data_line_num', 2);
 
         if (lastLineToProcess && lastLineToProcess !== "")
             formData.append('last_line_to_process', lastLineToProcess);
-        else 
+        else
             formData.append('last_line_to_process', -1);
-            
+
         formData.append('prefix_data', dataPrefix);
         formData.append('prefix_data_uri', dataPrefixUri);
         formData.append('prefix_predicate', predicatePrefix);
         formData.append('prefix_predicate_uri', predicatePrefixUri);
         formData.append('has_titles', hasTitles);
+
+        // Display the key/value pairs
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         try {
             const responseFile = await axios.post('/turtlify', formData, {
@@ -145,8 +156,13 @@ export default function TurtlForm() {
         if (!e.target.files || !e.target.files.length || !e.target.files[0]) {
             setmessage("No File Added.")
         }
-        setFile(e.target.files[0]);
-        setfileName(e.target.files[0].name.replace(".csv", ""));
+        if (e.target.files && e.target.files.length) {
+            setFile(e.target.files[0]);
+            setfileName(e.target.files[0].name.replace(".csv", ""));
+        } else {
+            setFile(null);
+            setfileName("");
+        }
     }
 
     return (
@@ -208,9 +224,10 @@ export default function TurtlForm() {
                                 }
                             }}
                             variant="standard"
+                            disabled={!hasTitles}
                             required
-                            value={titleLineNum}
-                            onChange={(e) => setTitleLineNum(e.target.value)}
+                            value={hasTitles ? titleLineNum || "" : -1}
+                            onChange={(e) => setTitleLineNum(parseInt(e.target.value))}
                         />
 
                         <TextField
@@ -228,8 +245,8 @@ export default function TurtlForm() {
                             }}
                             variant="standard"
                             required
-                            value={dataLineNum}
-                            onChange={(e) => setDataLineNum(e.target.value)}
+                            value={dataLineNum || ""}
+                            onChange={(e) => setDataLineNum(parseInt(e.target.value))}
                         />
 
                     </Box>
@@ -389,7 +406,7 @@ export default function TurtlForm() {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(event)=>setfileName(event.target.value)}
+                            onChange={(event) => setfileName(event.target.value)}
                             sx={{ flex: 1, flexGrow: 1, marginLeft: "10px" }}
                             variant="standard"
                             required
