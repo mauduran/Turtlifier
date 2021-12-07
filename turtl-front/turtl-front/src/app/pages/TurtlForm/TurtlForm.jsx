@@ -70,9 +70,9 @@ export default function TurtlForm() {
             .then(res => {
                 if (res.status !== 200) setLoaded(true);
                 //Set Title Tine to its default value#
-                setTitleLineNum(parseInt(res.data.titleLineNum));
+                setTitleLineNum(parseInt(res.data.titleLineNum || ''));
                 //Set Data Start Line to its default value
-                setDataLineNum(parseInt(res.data.dataLineNum));
+                setDataLineNum(parseInt(res.data.dataLineNum || ''));
 
                 //Last line to process to its default value 
                 let lastLineToProcessStr = res.data.lastLineToProcess;
@@ -103,12 +103,18 @@ export default function TurtlForm() {
         formData.append('file', file);
         formData.append('separator', separator);
         formData.append('has_titles', hasTitles);
-        if (titleLineNum && titleLineNum !== "")
+
+        if (!hasTitles)
+            formData.append('title_line_num', -1);
+        else if (titleLineNum && titleLineNum !== "")
             formData.append('title_line_num', titleLineNum);
         else
             formData.append('title_line_num', 1);
+
         if (dataLineNum && dataLineNum !== "")
             formData.append('data_line_num', dataLineNum);
+        else if (!hasTitles)
+            formData.append('data_line_num', 1);
         else
             formData.append('data_line_num', 2);
 
@@ -122,6 +128,11 @@ export default function TurtlForm() {
         formData.append('prefix_predicate', predicatePrefix);
         formData.append('prefix_predicate_uri', predicatePrefixUri);
         formData.append('has_titles', hasTitles);
+
+        // Display the key/value pairs
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         try {
             const responseFile = await axios.post('/turtlify', formData, {
@@ -150,8 +161,13 @@ export default function TurtlForm() {
         if (!e.target.files || !e.target.files.length || !e.target.files[0]) {
             setmessage("No File Added.")
         }
-        setFile(e.target.files[0]);
-        setfileName(e.target.files[0].name.replace(".csv", ""));
+        if (e.target.files && e.target.files.length) {
+            setFile(e.target.files[0]);
+            setfileName(e.target.files[0].name.replace(".csv", ""));
+        } else {
+            setFile(null);
+            setfileName("");
+        }
     }
 
     return (
@@ -215,9 +231,10 @@ export default function TurtlForm() {
                                 }
                             }}
                             variant="standard"
+                            disabled={!hasTitles}
                             required
-                            value={titleLineNum}
-                            onChange={(e) => setTitleLineNum(e.target.value)}
+                            value={hasTitles ? titleLineNum || "" : -1}
+                            onChange={(e) => setTitleLineNum(parseInt(e.target.value))}
                         />
 
                         <TextField
@@ -235,8 +252,8 @@ export default function TurtlForm() {
                             }}
                             variant="standard"
                             required
-                            value={dataLineNum}
-                            onChange={(e) => setDataLineNum(e.target.value)}
+                            value={dataLineNum || ""}
+                            onChange={(e) => setDataLineNum(parseInt(e.target.value))}
                         />
 
                     </Box>
