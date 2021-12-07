@@ -66,7 +66,7 @@ export default function TurtlForm() {
 
     useEffect(() => {
         // Get default configuration from server (which reads from config.ini file)
-        axios.get(`http://localhost:8000/config`)
+        axios.get(`/config`)
             .then(res => {
                 if (res.status !== 200) setLoaded(true);
                 //Set Title Tine to its default value#
@@ -141,6 +141,7 @@ export default function TurtlForm() {
                 seterrorLoading(true)
             } else {
                 setmessage(error.response.data.msg)
+                seterrorLoading(true)
             }
         }
     }
@@ -174,7 +175,7 @@ export default function TurtlForm() {
                         Convert your csv files into Turtl RDF triples!
                     </Typography>
                     {
-                        (loaded && <span style={{ color: 'red', fontSize: '12px' }}>There was an error loading the configuration values</span>)
+                        (loaded && <span style={{ color: 'red', fontSize: '12px' }}>There was an error loading the configuration values from the config.ini file</span>)
                     }
                     <FormGroup>
                         <FormControlLabel
@@ -403,7 +404,7 @@ export default function TurtlForm() {
                         />
                     </Box>
                     {
-                        (errorLoading && <span style={{ color: 'red', fontSize: '12px' }}>There was an error procesing the file</span>)
+                        (errorLoading && <span style={{ color: 'red', fontSize: '12px' }}>There was an error procesing the file, there was a problem with the server</span>)
                     }
                 </CardContent>
 
