@@ -2,11 +2,6 @@
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-#Ignore the front and static folder in /turtlifier since this folders can be created by running npm run build inside /turtl-front/turtl-front
-turtlifier/static
-turtlifier/front
-turtlifier/turtlifier/static
-turtlifier/turtlifier/front
 
 # dependencies
 
